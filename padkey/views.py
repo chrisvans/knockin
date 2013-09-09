@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.template import Context, loader
 from knockin import GeneratePasscode, AuthenticatePasscode
-from models import Passcode
+from models import Passcode, Diagnoser
 from datetime import datetime
 
 
@@ -24,6 +24,8 @@ def passcode(request, message='Enter Passcode'):
             lockout_check = now - timestamp_to_evaluate
 
             if lockout_check.seconds < actual_passcode.lockout_time:
+                log_passcode = Diagnoser(used_passcode=actual_passcode.passcode)
+                log_passcode.save()
                 message = 'Proper Passcode'
 
             else:
@@ -55,7 +57,10 @@ def generate_passcode(request, message=None):
         new_passcode.save()
         message = Passcode.objects.get(passcode=new_passcode.passcode)
 
-    return render(request, 'admin.html', {'message': message})
+    passcode_logs = Diagnoser.objects.all()
+    return render(request, 'admin.html', {'message': message,
+                                          'passcode_logs': passcode_logs,
+                                          })
 
 
 def login_view(request, message=None):

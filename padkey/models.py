@@ -1,7 +1,6 @@
 from django.db import models
-from django.utils import timezone
-from django.utils.timezone import utc, get_current_timezone, activate, localtime
-import datetime
+from django.utils.timezone import activate, localtime
+
 
 class Passcode(models.Model):
     passcode = models.CharField(max_length=4, null=False)
@@ -22,7 +21,7 @@ class Diagnoser(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, null=False)
 
     def __unicode__(self):
-        return "Passcode '%s' was used at '%s'." % (self.used_passcode, self.get_timestamp)
+        return "Passcode '%s'" % (self.used_passcode)
 
     def get_timestamp(self):
         server_time = localtime(self.timestamp)
