@@ -23,6 +23,8 @@ DATABASES = {
     }
 }
 
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -125,9 +127,11 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-
     'south',
     'padkey',
+    'nose',
+    'coverage',
+    'discover_runner',
 )
 
 # A sample logging configuration. The only tangible logging

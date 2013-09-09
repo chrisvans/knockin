@@ -7,10 +7,6 @@ from models import Passcode
 from datetime import datetime
 
 
-def KnockinException(Exception):
-    pass
-
-
 class GeneratePasscode():
     @classmethod
     def is_unique(cls, code):
@@ -19,7 +15,7 @@ class GeneratePasscode():
             return False
         else:
             return True
-
+    
     @classmethod
     def generate_passcode(cls):
         # Only generate a 4-digit passcode
