@@ -1,4 +1,7 @@
-# Create your views here.
+from knockin import GeneratePasscode, AuthenticatePasscode, run
+from models import Passcode
+
 
 def passcode(request):
+    run()
      
