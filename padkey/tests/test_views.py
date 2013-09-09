@@ -2,6 +2,8 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.http import QueryDict
 from django.test import TestCase
 from django.test.client import Client, RequestFactory
@@ -24,6 +26,21 @@ class GenericViewTests(TestCase):
         self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
         self.factory = RequestFactory()
         self.anon_user = AnonymousUser()
+        self.user = User()
+        self.user.username = 'Chris'
+        self.user.password = 'bagel'
+        self.user.set_password('bagel')
+        self.user.save()
+
+    def tearDown(self):
+        all_passcodes = Passcode.objects.all()
+        for passcode in all_passcodes:
+            passcode.delete()
+        all_users = User.objects.all()
+        for user in all_users:
+            user.delete()
+
+    def generate_passcodes(self):
         passcode = Passcode()
         passcode.passcode = '0232'
         passcode.save()
@@ -31,11 +48,6 @@ class GenericViewTests(TestCase):
         expired_passcode.passcode = '0101'
         expired_passcode.lockout_time = -1
         expired_passcode.save()
-
-    def tearDown(self):
-        all_passcodes = Passcode.objects.all()
-        for passcode in all_passcodes:
-            passcode.delete()
 
     def test_that_passcode_view_GET_returns_200(self):
         request = self.factory.get('/')
@@ -59,6 +71,7 @@ class GenericViewTests(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_that_passcode_view_POST_expired_passcode_fails_and_sets_is_active_to_false_with_200(self):
+        self.generate_passcodes()
         request = self.factory.post('/', {'passcode': '0101'})
         request.session = self.session
         request.user = self.anon_user
@@ -67,19 +80,37 @@ class GenericViewTests(TestCase):
         check_expired_passcode = Passcode.objects.get(passcode='0101')
         self.assertEquals(check_expired_passcode.is_active, False)        
 
-    def test_that_generate_passcode_view_GET_returns_200(self):
+    def test_that_generate_passcode_view_GET_with_anon_user_returns_302(self):
         request = self.factory.get('/admin/')
         request.session = self.session
         request.user = self.anon_user
         response = generate_passcode(request)
-        self.assertEquals(response.status_code, 200)
+        response.client = self.client
+        self.assertEquals(response.status_code, 302)
 
-    def test_that_generate_passcode_view_POST_generates_passcode_and_returns_200(self):
-        request = self.factory.post('/admin/')
+    def test_that_generate_passcode_view_POST_with_anon_user_does_not_generate_passcode_and_returns_302(self):
+        request = self.factory.post('/admin/', {'timeout': '15'})
         request.session = self.session
         request.user = self.anon_user
         response = generate_passcode(request)
-        self.assertEquals(response.status_code, 200)
-        self.assertEquals(Passcode.objects.all().exists(), True)
+        response.client = self.client
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(Passcode.objects.all().exists(), False)
+
+    def test_that_generate_passcode_view_GET_with_user_returns_200(self):
+        request = self.factory.get('/admin/')
+        request.session = self.session
+        request.user = self.user
+        response = generate_passcode(request)
+        response.client = self.client
+        self.assertEquals(response.status_code, 200)        
+
+    def test_that_generate_passcode_view_POST_with_user_generates_passcode_and_returns_200(self):
+        request = self.factory.post('/admin/', {'timeout': '15'})
+        request.session = self.session
+        request.user = self.user
+        response = generate_passcode(request)
+        response.client = self.client
+        self.assertEquals(response.status_code, 200)  
 
 

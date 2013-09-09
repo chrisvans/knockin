@@ -8,8 +8,11 @@
       <form action="{% url 'admin' %}" method="post">
 
         {% csrf_token %}
-        <button type="submit">Generate Passcode</button>
+        <button name="timeout" value="15" type="submit">Generate Passcode</button>
 
+      </form>
+      <form action="{% url 'logout' %}">
+        <button type="submit">Logout</button>
       </form>
   </body>
 </html>

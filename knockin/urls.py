@@ -8,6 +8,8 @@ from padkey import views
 urlpatterns = patterns('',
     url(r'^$', 'padkey.views.passcode', name='passcode'),
     url(r'^admin/$', 'padkey.views.generate_passcode', name='admin'),
+    url(r'^login/$', 'padkey.views.login_view', name='login'),
+    url(r'^logout/$', 'padkey.views.logout_view', name='logout'),
     # Examples:
     # url(r'^$', 'knockin.views.home', name='home'),
     # url(r'^knockin/', include('knockin.foo.urls')),
