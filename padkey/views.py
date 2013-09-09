@@ -8,14 +8,31 @@ from django.core.urlresolvers import reverse
 from django.template import Context, loader
 from knockin import GeneratePasscode, AuthenticatePasscode
 from models import Passcode
-
+from datetime import datetime
 
 def passcode(request):
     message = 'This is where the user will enter in the passcode.'
 
     if request.method == 'POST':
+        now = datetime.now()
         passcode_attempt = request.POST['passcode']
-        pass
+        passcode_check = Passcode.objects.filter(passcode=passcode_attempt)
+
+        if passcode_check.exists():
+            passcode_check.get(passcode=passcode_attempt)
+            lockout_check = passcode.timestamp - now
+
+            if passcode_check.lockout_time < lockout_check.seconds:
+                message = 'Proper Passcode'
+                
+            else:
+                message = 'Expired Passcode'
+                passcode_check.is_active = False
+                passcode_check.save()
+            
+        else:
+            # add to anonymous_user count for lockout
+            pass
 
     return render(request, 'index.html', { 'message' : message })
 
