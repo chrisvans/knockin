@@ -3,5 +3,12 @@
     {% if message %}
       {{ message }}
     {% endif %}
+      <form action="{% url 'passcode' %}" method="post">
+
+        {% csrf_token %}
+        <input type="text" name="passcode" class="input-block-level" placeholder="*Your Passcode">
+        <button type="submit">Submit Passcode</button>
+
+      </form>
   </body>
 </html>

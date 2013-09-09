@@ -14,25 +14,25 @@ def passcode(request):
     message = 'This is where the user will enter in the passcode.'
 
     if request.method == 'POST':
-        now = datetime.now()
+        now = datetime.utcnow()
         passcode_attempt = request.POST['passcode']
-        passcode_check = Passcode.objects.filter(passcode=passcode_attempt)
+        passcode_check = Passcode.objects.filter(is_active=True).filter(passcode=passcode_attempt)
 
         if passcode_check.exists():
-            passcode_check.get(passcode=passcode_attempt)
-            lockout_check = passcode.timestamp - now
+            actual_passcode = passcode_check.get(passcode=passcode_attempt)
+            timestamp_to_evaluate = actual_passcode.timestamp.replace(tzinfo=None)
+            lockout_check = now - timestamp_to_evaluate
 
-            if passcode_check.lockout_time < lockout_check.seconds:
+            if lockout_check.seconds < actual_passcode.lockout_time:
                 message = 'Proper Passcode'
-                
+
             else:
                 message = 'Expired Passcode'
-                passcode_check.is_active = False
-                passcode_check.save()
+                actual_passcode.is_active = False
+                actual_passcode.save()
             
         else:
-            # add to anonymous_user count for lockout
-            pass
+            message = 'Bad Passcode'
 
     return render(request, 'index.html', { 'message' : message })
 
