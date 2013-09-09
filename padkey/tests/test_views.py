@@ -9,7 +9,7 @@ from django.test import TestCase
 from django.test.client import Client, RequestFactory
 from django.utils import unittest
 from django.utils.importlib import import_module
-from padkey.views import passcode, generate_passcode
+from padkey.views import passcode, generate_passcode, login_view, logout_view
 from padkey.models import Passcode
 import datetime
 
@@ -113,4 +113,12 @@ class GenericViewTests(TestCase):
         response.client = self.client
         self.assertEquals(response.status_code, 200)  
 
+    def test_that_logout_view_logs_user_out_if_user_and_returns_302(self):
+        request = self.factory.get('/logout/')
+        request.session = self.session
+        request.user = self.user
+        response = logout_view(request)
+        response.client = self.client
+        self.assertEquals(response.status_code, 302)
+        self.assertNotIn('user', self.session)
 
