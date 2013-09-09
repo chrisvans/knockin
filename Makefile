@@ -1,4 +1,7 @@
 
+clean:
+	@rm -rf *.py[c,o] .coverage htmlcov/
+
 check: check-pep8 check-tests
 
 PEP8=$(shell which pep8)
