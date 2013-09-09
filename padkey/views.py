@@ -17,7 +17,30 @@ def log_passcode(passcode, success=False):
     log_passcode.save()
 
 
+def failure_counter(request):
+
+    if request.user.is_authenticated():
+        return True
+
+    if 'failure_counter' in request.session:
+        request.session['failure_counter'] += 1
+
+    else:
+        request.session['failure_counter'] = 1
+
+    return False
+
+
+def failure_blocker(request):
+
+    if ('failure_counter' in request.session) and (request.session['failure_counter'] > 10):
+        return True
+
+
 def passcode(request, message='Enter Passcode'):
+
+    if failure_blocker(request):
+        return HttpResponseRedirect('http://www.bobzyeruncle.com/archives/debt-thumb.jpg')
 
     if request.method == 'POST':
         now = datetime.utcnow()
@@ -38,10 +61,12 @@ def passcode(request, message='Enter Passcode'):
                 message = 'Expired Passcode'
                 actual_passcode.is_active = False
                 actual_passcode.save()
+                failure_counter(request)
 
         else:
             log_passcode(passcode=passcode_attempt)
             message = 'Bad Passcode'
+            failure_counter(request)
 
     return render(request, 'index.html', {'message': message})
 
