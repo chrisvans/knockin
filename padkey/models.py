@@ -17,11 +17,16 @@ class Passcode(models.Model):
 
 
 class Diagnoser(models.Model):
-    used_passcode = models.CharField(max_length=4, null=False)
+    used_passcode = models.CharField(max_length=20, null=False)
     timestamp = models.DateTimeField(auto_now_add=True, null=False)
+    was_successful = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return "Passcode '%s'" % (self.used_passcode)
+        if self.was_successful:
+            message = 'successfully'
+        else:
+            message = 'unsuccessfully'
+        return "Passcode '%s' was %s" % (self.used_passcode, message)
 
     def get_timestamp(self):
         server_time = localtime(self.timestamp)

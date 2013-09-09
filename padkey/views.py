@@ -11,6 +11,12 @@ from models import Passcode, Diagnoser
 from datetime import datetime
 
 
+def log_passcode(passcode, success=False):
+    log_passcode = Diagnoser(used_passcode=passcode)
+    log_passcode.was_successful = success
+    log_passcode.save()
+
+
 def passcode(request, message='Enter Passcode'):
 
     if request.method == 'POST':
@@ -24,16 +30,17 @@ def passcode(request, message='Enter Passcode'):
             lockout_check = now - timestamp_to_evaluate
 
             if lockout_check.seconds < actual_passcode.lockout_time:
-                log_passcode = Diagnoser(used_passcode=actual_passcode.passcode)
-                log_passcode.save()
+                log_passcode(passcode=actual_passcode.passcode, success=True)
                 message = 'Proper Passcode'
 
             else:
+                log_passcode(passcode=actual_passcode.passcode)
                 message = 'Expired Passcode'
                 actual_passcode.is_active = False
                 actual_passcode.save()
 
         else:
+            log_passcode(passcode=passcode_attempt)
             message = 'Bad Passcode'
 
     return render(request, 'index.html', {'message': message})
