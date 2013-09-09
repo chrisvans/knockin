@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <p>This is where the admin will generate a passcode</p>
+    {% if message %}
+      {{ message }}
+    {% endif %}
+
+      <form action="{% url 'admin' %}" method="post">
+
+        {% csrf_token %}
+        <button type="submit">Generate Passcode</button>
+
+      </form>
+  </body>
+</html>

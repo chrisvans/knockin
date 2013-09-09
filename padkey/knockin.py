@@ -21,14 +21,13 @@ class GeneratePasscode():
     
     @classmethod
     def generate_passcode(cls):
-        now = datetime.utcnow()
         # Only generate a 4-digit passcode
         unique = False
         while not unique:
-            code = ''.join(random.choice(string.digits) for x in range(4))
-            unique = cls.is_unique(code)
+            passcode = ''.join(random.choice(string.digits) for x in range(4))
+            unique = cls.is_unique(passcode)
 
-        return (code, now)
+        return passcode
 
 
 class AuthenticatePasscode():
@@ -41,7 +40,3 @@ class AuthenticatePasscode():
         else:
             return False
 
-
-def run():
-    passcode, time = GeneratePasscode.generate_passcode()
-    print "generated passcode %s at %s" % (passcode, time)

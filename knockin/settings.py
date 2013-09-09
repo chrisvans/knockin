@@ -1,4 +1,5 @@
 # Django settings for knockin project.
+import os 
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -6,6 +7,8 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+
+BASE_DIR = os.path.dirname(os.path.abspath('__file__'))
 
 MANAGERS = ADMINS
 
@@ -107,6 +110,7 @@ ROOT_URLCONF = 'knockin.urls'
 WSGI_APPLICATION = 'knockin.wsgi.application'
 
 TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.

@@ -7,6 +7,7 @@ from padkey import views
 
 urlpatterns = patterns('',
     url(r'^$', 'padkey.views.passcode', name='passcode'),
+    url(r'^admin/$', 'padkey.views.generate_passcode', name='admin'),
     # Examples:
     # url(r'^$', 'knockin.views.home', name='home'),
     # url(r'^knockin/', include('knockin.foo.urls')),
