@@ -1,10 +1,12 @@
 from django.conf.urls import patterns, include, url
-
+import padkey
+from padkey import views
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', 'padkey.views.passcode', name='passcode'),
     # Examples:
     # url(r'^$', 'knockin.views.home', name='home'),
     # url(r'^knockin/', include('knockin.foo.urls')),
