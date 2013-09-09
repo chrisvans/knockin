@@ -15,7 +15,7 @@ class GeneratePasscode():
             return False
         else:
             return True
-    
+
     @classmethod
     def generate_passcode(cls):
         # Only generate a 4-digit passcode
