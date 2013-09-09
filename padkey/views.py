@@ -10,6 +10,7 @@ from knockin import GeneratePasscode, AuthenticatePasscode
 from models import Passcode
 from datetime import datetime
 
+
 def passcode(request):
     message = 'This is where the user will enter in the passcode.'
 
@@ -30,11 +31,12 @@ def passcode(request):
                 message = 'Expired Passcode'
                 actual_passcode.is_active = False
                 actual_passcode.save()
-            
+
         else:
             message = 'Bad Passcode'
 
-    return render(request, 'index.html', { 'message' : message })
+    return render(request, 'index.html', {'message': message})
+
 
 def generate_passcode(request):
     # Verify that valid user is logged in
@@ -47,4 +49,4 @@ def generate_passcode(request):
         new_passcode.save()
         message = Passcode.objects.get(passcode=new_passcode.passcode)
 
-    return render(request, 'admin.html', { 'message' : message })
+    return render(request, 'admin.html', {'message': message})

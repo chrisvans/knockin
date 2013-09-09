@@ -6,6 +6,7 @@ import sys
 from models import Passcode
 from datetime import datetime
 
+
 def KnockinException(Exception):
     pass
 
@@ -18,7 +19,7 @@ class GeneratePasscode():
             return False
         else:
             return True
-    
+
     @classmethod
     def generate_passcode(cls):
         # Only generate a 4-digit passcode
@@ -39,4 +40,3 @@ class AuthenticatePasscode():
             return True
         else:
             return False
-

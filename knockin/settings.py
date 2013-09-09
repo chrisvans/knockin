@@ -1,5 +1,5 @@
 # Django settings for knockin project.
-import os 
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -81,7 +81,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -91,7 +90,6 @@ SECRET_KEY = '-(1)=6##js7_g8-ig%e@dmum+x%w%sp7ff69)=+bqx$7r0w1%-'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
