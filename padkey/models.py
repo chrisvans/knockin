@@ -17,6 +17,7 @@ class Passcode(models.Model):
 
 
 class Diagnoser(models.Model):
+    # Model for keeping track of successful and unsuccessful passcode attempts
     used_passcode = models.CharField(max_length=20, null=False)
     timestamp = models.DateTimeField(auto_now_add=True, null=False)
     was_successful = models.BooleanField(default=False)
