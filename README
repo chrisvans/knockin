@@ -1,1 +1,7 @@
-let me in!
+Padkey
+
+An application for homeowners who want to be able to remotely allow access to their homes.
+
+Homeowners can generate a unique passcode that can be used to open a locked door.  This passcode can be left valid for 15 minutes, or a longer period of time.  It can even be set to only allow access during certain times of the week.
+
+Padkey is currently intended to be used with a Raspberry Pi hooked up to a door lock.
