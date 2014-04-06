@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'south',
     'padkey',
+    'sms',
     'nose',
     'coverage',
     'discover_runner',
